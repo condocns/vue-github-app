@@ -27,3 +27,24 @@ jobs:
         with:
             name: dis-production
             path: dist
+
+  deploy-to-prodution:
+    runs-on: ubuntu-latest
+    needs: build-production-job
+    steps:
+        - name: Download dist folder actifact
+          uses: actions/download-artifact@v3
+          with:
+              name: dis-production
+              path: dist
+
+        - run: ls dist
+
+        - uses: actions/checkout@v4
+
+        - name: publish vue to githib pages
+          uses: SerhiiKa/VuePagesAction@1.0.4
+          with:
+              username: ${{ github.actor }}
+              reponame: ${{ github.event.repository.name }}
+              token: ${{ secrets.GITHUB_TOKEN }}
